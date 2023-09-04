@@ -1,8 +1,8 @@
-import {CartForm, Image, Money} from '@shopify/hydrogen';
-import {Link} from '@remix-run/react';
-import {useVariantUrl} from '~/utils';
+import { CartForm, Image, Money } from '@shopify/hydrogen';
+import { Link } from '@remix-run/react';
+import { useVariantUrl } from '~/utils';
 
-export function CartMain({layout, cart}) {
+export function CartMain({ layout, cart }) {
   const linesCount = Boolean(cart?.lines?.nodes?.length || 0);
   const withDiscount =
     cart &&
@@ -17,7 +17,7 @@ export function CartMain({layout, cart}) {
   );
 }
 
-function CartDetails({layout, cart}) {
+function CartDetails({ layout, cart }) {
   const cartHasItems = !!cart && cart.totalQuantity > 0;
 
   return (
@@ -33,7 +33,7 @@ function CartDetails({layout, cart}) {
   );
 }
 
-function CartLines({lines, layout}) {
+function CartLines({ lines, layout }) {
   if (!lines) return null;
 
   return (
@@ -47,9 +47,9 @@ function CartLines({lines, layout}) {
   );
 }
 
-function CartLineItem({layout, line}) {
-  const {id, merchandise} = line;
-  const {product, title, image, selectedOptions} = merchandise;
+function CartLineItem({ layout, line }) {
+  const { id, merchandise } = line;
+  const { product, title, image, selectedOptions } = merchandise;
   const lineItemUrl = useVariantUrl(product.handle, selectedOptions);
 
   return (
@@ -96,12 +96,12 @@ function CartLineItem({layout, line}) {
   );
 }
 
-function CartCheckoutActions({checkoutUrl}) {
+function CartCheckoutActions({ checkoutUrl }) {
   if (!checkoutUrl) return null;
 
   return (
     <div>
-      <a href={checkoutUrl} target="_self">
+      <a href={checkoutUrl} target="_self" className="text-sky-500 hover:text-sky-600 font-semibold">
         <p>Continue to Checkout &rarr;</p>
       </a>
       <br />
@@ -109,7 +109,7 @@ function CartCheckoutActions({checkoutUrl}) {
   );
 }
 
-export function CartSummary({cost, layout, children = null}) {
+export function CartSummary({ cost, layout, children = null }) {
   const className =
     layout === 'page' ? 'cart-summary-page' : 'cart-summary-aside';
 
@@ -131,54 +131,56 @@ export function CartSummary({cost, layout, children = null}) {
   );
 }
 
-function CartLineRemoveButton({lineIds}) {
+function CartLineRemoveButton({ lineIds }) {
   return (
     <CartForm
       route="/cart"
       action={CartForm.ACTIONS.LinesRemove}
-      inputs={{lineIds}}
+      inputs={{ lineIds }}
     >
-      <button type="submit">Remove</button>
+      <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded">Remove</button>
     </CartForm>
   );
 }
 
-function CartLineQuantity({line}) {
+function CartLineQuantity({ line }) {
   if (!line || typeof line?.quantity === 'undefined') return null;
-  const {id: lineId, quantity} = line;
+  const { id: lineId, quantity } = line;
   const prevQuantity = Number(Math.max(0, quantity - 1).toFixed(0));
   const nextQuantity = Number((quantity + 1).toFixed(0));
 
   return (
     <div className="cart-line-quantiy">
       <small>Quantity: {quantity} &nbsp;&nbsp;</small>
-      <CartLineUpdateButton lines={[{id: lineId, quantity: prevQuantity}]}>
+      <CartLineUpdateButton lines={[{ id: lineId, quantity: prevQuantity }]}>
         <button
           aria-label="Decrease quantity"
           disabled={quantity <= 1}
           name="decrease-quantity"
           value={prevQuantity}
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded"
         >
           <span>&#8722; </span>
         </button>
       </CartLineUpdateButton>
       &nbsp;
-      <CartLineUpdateButton lines={[{id: lineId, quantity: nextQuantity}]}>
+      <CartLineUpdateButton lines={[{ id: lineId, quantity: nextQuantity }]}>
         <button
           aria-label="Increase quantity"
           name="increase-quantity"
           value={nextQuantity}
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded"
         >
           <span>&#43;</span>
         </button>
-      </CartLineUpdateButton>
+      </CartLineUpdateButton >
       &nbsp;
       <CartLineRemoveButton lineIds={[lineId]} />
     </div>
   );
 }
 
-function CartLinePrice({line, priceType = 'regular', ...passthroughProps}) {
+function CartLinePrice({ line, priceType = 'regular', ...passthroughProps }) {
   if (!line?.cost?.amountPerQuantity || !line?.cost?.totalAmount) return null;
 
   const moneyV2 =
@@ -197,7 +199,7 @@ function CartLinePrice({line, priceType = 'regular', ...passthroughProps}) {
   );
 }
 
-export function CartEmpty({hidden = false, layout = 'aside'}) {
+export function CartEmpty({ hidden = false, layout = 'aside' }) {
   return (
     <div hidden={hidden}>
       <br />
@@ -220,11 +222,11 @@ export function CartEmpty({hidden = false, layout = 'aside'}) {
   );
 }
 
-function CartDiscounts({discountCodes}) {
+function CartDiscounts({ discountCodes }) {
   const codes =
     discountCodes
       ?.filter((discount) => discount.applicable)
-      ?.map(({code}) => code) || [];
+      ?.map(({ code }) => code) || [];
 
   return (
     <div>
@@ -254,7 +256,7 @@ function CartDiscounts({discountCodes}) {
   );
 }
 
-function UpdateDiscountForm({discountCodes, children}) {
+function UpdateDiscountForm({ discountCodes, children }) {
   return (
     <CartForm
       route="/cart"
@@ -268,12 +270,12 @@ function UpdateDiscountForm({discountCodes, children}) {
   );
 }
 
-function CartLineUpdateButton({children, lines}) {
+function CartLineUpdateButton({ children, lines }) {
   return (
     <CartForm
       route="/cart"
       action={CartForm.ACTIONS.LinesUpdate}
-      inputs={{lines}}
+      inputs={{ lines }}
     >
       {children}
     </CartForm>
