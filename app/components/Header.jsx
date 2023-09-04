@@ -1,8 +1,8 @@
-import {Await, NavLink, useMatches} from '@remix-run/react';
-import {Suspense} from 'react';
+import { Await, NavLink, useMatches } from '@remix-run/react';
+import { Suspense } from 'react';
 
-export function Header({header, isLoggedIn, cart}) {
-  const {shop, menu} = header;
+export function Header({ header, isLoggedIn, cart }) {
+  const { shop, menu } = header;
   return (
     <header className="header">
       <NavLink prefetch="intent" to="/" style={activeLinkStyle} end>
@@ -14,7 +14,7 @@ export function Header({header, isLoggedIn, cart}) {
   );
 }
 
-export function HeaderMenu({menu, viewport}) {
+export function HeaderMenu({ menu, viewport }) {
   const [root] = useMatches();
   const publicStoreDomain = root?.data?.publicStoreDomain;
   const className = `header-menu-${viewport}`;
@@ -45,7 +45,7 @@ export function HeaderMenu({menu, viewport}) {
         // if the url is internal, we strip the domain
         const url =
           item.url.includes('myshopify.com') ||
-          item.url.includes(publicStoreDomain)
+            item.url.includes(publicStoreDomain)
             ? new URL(item.url).pathname
             : item.url;
         return (
@@ -66,7 +66,7 @@ export function HeaderMenu({menu, viewport}) {
   );
 }
 
-function HeaderCtas({isLoggedIn, cart}) {
+function HeaderCtas({ isLoggedIn, cart }) {
   return (
     <nav className="header-ctas" role="navigation">
       <HeaderMenuMobileToggle />
@@ -91,11 +91,11 @@ function SearchToggle() {
   return <a href="#search-aside">Search</a>;
 }
 
-function CartBadge({count}) {
+function CartBadge({ count }) {
   return <a href="#cart-aside">Cart {count}</a>;
 }
 
-function CartToggle({cart}) {
+function CartToggle({ cart }) {
   return (
     <Suspense fallback={<CartBadge count={0} />}>
       <Await resolve={cart}>
@@ -150,7 +150,7 @@ const FALLBACK_HEADER_MENU = {
   ],
 };
 
-function activeLinkStyle({isActive, isPending}) {
+function activeLinkStyle({ isActive, isPending }) {
   return {
     fontWeight: isActive ? 'bold' : undefined,
     color: isPending ? 'grey' : 'black',
